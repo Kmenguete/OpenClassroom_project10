@@ -4,6 +4,12 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "username"]
+
+
 class SignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
