@@ -24,6 +24,7 @@ import projects.views
 router = routers.SimpleRouter()
 
 router.register('projects', projects.views.ProjectViewSet, basename='projects')
+router.register('create_project', projects.views.CreateProjectViewSet, basename='create_project')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
