@@ -23,3 +23,16 @@ class CreateProjectViewSet(ModelViewSet):
     def get_queryset(self, request):
         return Project.objects.filter(author=request.user), \
                Contributor.objects.filter(user=request.user).values('project')
+
+
+class DetailProjectViewSet(ModelViewSet):
+
+    serializer_class = ProjectSerializer
+
+    @login_required
+    def get_object(self, id):
+        return Project.objects.get(id=id)
+
+    @login_required
+    def update(self, request, id):
+        pass
