@@ -151,6 +151,18 @@ class UpdateIssueSerializer(ModelSerializer):
         return issue
 
 
+class DeleteIssueSerializer(ModelSerializer):
+
+    class Meta:
+        model = Issue
+        fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
+
+    @login_required
+    def __delete__(self, id):
+        issue = Issue.objects.get(id=id)
+        issue.delete()
+
+
 class CommentSerializer(ModelSerializer):
 
     class Meta:
