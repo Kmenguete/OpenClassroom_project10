@@ -29,6 +29,25 @@ class CreateProjectSerializer(ModelSerializer):
         return project
 
 
+class UpdateProjectSerializer(ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ('title', 'description', 'type')
+
+    @login_required
+    def update(self, id, validated_data):
+        project = Project.objects.get(id=id).update(
+            title=validated_data['title'],
+            description=validated_data['description'],
+            type=validated_data['type']
+        )
+
+        project.save()
+
+        return project
+
+
 class ContributorSerializer(ModelSerializer):
 
     class Meta:
