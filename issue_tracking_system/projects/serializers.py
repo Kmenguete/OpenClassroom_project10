@@ -168,3 +168,20 @@ class CommentSerializer(ModelSerializer):
     class Meta:
         model = Comment
         fields = ['description']
+
+
+class CreateCommentSerializer(ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ('description', )
+
+    @login_required
+    def create(self, validated_data):
+        comment = Comment.objects.create(
+            description=validated_data['description']
+        )
+
+        comment.save()
+
+        return comment

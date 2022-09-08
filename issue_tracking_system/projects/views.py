@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Project, Contributor, Issue
+from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
     AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, \
-    CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer
+    CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer, CreateCommentSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -125,3 +125,14 @@ class DeleteIssueViewSet(ModelViewSet):
         project = Project.objects.get(id=id)
         issues = Issue.objects.filter(project=project)
         return issues
+
+
+class CreateCommentViewSet(ModelViewSet):
+
+    serializer_class = CreateCommentSerializer
+
+    @login_required
+    def get_queryset(self, id):
+        issue = Issue.objects.get(id=id)
+        comments = Comment.objects.filter(issue=issue)
+        return comments
