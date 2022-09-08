@@ -45,6 +45,9 @@ router.register('project/<int:id>/issue/<int:id>/comments', projects.views.ListC
                 basename='comments')
 router.register('project/<int:id>/issue/<int:id>/update_comment/<int:id>', projects.views.UpdateCommentViewSet,
                 basename='update_comment')
+router.register('project/<int:id>/issue/<int:id>/delete_comment/<int:id>', projects.views.DeleteCommentViewSet,
+                basename='delete_comment')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
