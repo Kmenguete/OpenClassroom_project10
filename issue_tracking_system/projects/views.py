@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .models import Project, Contributor
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
-    AddContributorSerializer
+    AddContributorSerializer, ContributorSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -57,6 +57,16 @@ class DeleteProjectViewSet(ModelViewSet):
 class AddContributorViewSet(ModelViewSet):
 
     serializer_class = AddContributorSerializer
+
+    @login_required
+    def get_queryset(self, id):
+        project = Project.objects.get(id=id)
+        return Contributor.objects.filter(project=project)
+
+
+class ListContributorViewSet(ModelViewSet):
+
+    serializer_class = ContributorSerializer
 
     @login_required
     def get_queryset(self, id):
