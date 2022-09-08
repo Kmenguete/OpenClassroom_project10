@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Project, Contributor
-from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer
+from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -41,3 +41,13 @@ class UpdateProjectViewSet(ModelViewSet):
     @login_required
     def get_object(self, id):
         return Project.objects.get(id=id)
+
+
+class DeleteProjectViewSet(ModelViewSet):
+
+    serializer_class = DeleteProjectSerializer
+
+    @login_required
+    def get_queryset(self, request):
+        return Project.objects.filter(author=request.user), \
+               Contributor.objects.filter(user=request.user).values('project')

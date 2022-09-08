@@ -48,6 +48,18 @@ class UpdateProjectSerializer(ModelSerializer):
         return project
 
 
+class DeleteProjectSerializer(ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ('title', 'description', 'type')
+
+    @login_required
+    def __delete__(self, id):
+        project = Project.objects.get(id=id)
+        project.delete()
+
+
 class ContributorSerializer(ModelSerializer):
 
     class Meta:
