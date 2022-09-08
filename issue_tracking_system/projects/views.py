@@ -168,3 +168,12 @@ class DeleteCommentViewSet(ModelViewSet):
         issue = Issue.objects.get(id=id)
         comments = Comment.objects.filter(issue=issue)
         return comments
+
+
+class DetailCommentViewSet(ModelViewSet):
+
+    serializer_class = CommentSerializer
+
+    @login_required
+    def get_object(self, id):
+        return Comment.object.get(id=id)
