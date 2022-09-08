@@ -185,3 +185,20 @@ class CreateCommentSerializer(ModelSerializer):
         comment.save()
 
         return comment
+
+
+class UpdateCommentSerializer(ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ('description', )
+
+    @login_required
+    def update(self, id, validated_data):
+        comment = Comment.objects.get(id=id).update(
+            description=validated_data['description']
+        )
+
+        comment.save()
+
+        return comment
