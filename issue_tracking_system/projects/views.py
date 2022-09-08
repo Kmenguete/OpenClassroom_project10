@@ -4,7 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
     AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, \
-    CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer, CreateCommentSerializer
+    CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer, CreateCommentSerializer, CommentSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -130,6 +130,17 @@ class DeleteIssueViewSet(ModelViewSet):
 class CreateCommentViewSet(ModelViewSet):
 
     serializer_class = CreateCommentSerializer
+
+    @login_required
+    def get_queryset(self, id):
+        issue = Issue.objects.get(id=id)
+        comments = Comment.objects.filter(issue=issue)
+        return comments
+
+
+class ListCommentViewSet(ModelViewSet):
+
+    serializer_class = CommentSerializer
 
     @login_required
     def get_queryset(self, id):
