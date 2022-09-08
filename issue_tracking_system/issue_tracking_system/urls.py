@@ -27,6 +27,7 @@ router.register('projects', projects.views.ProjectViewSet, basename='projects')
 router.register('create_project', projects.views.CreateProjectViewSet, basename='create_project')
 router.register('project/<int:id>', projects.views.DetailProjectViewSet, basename='project')
 router.register('update_project/<int:id>', projects.views.UpdateProjectViewSet, basename='update_project')
+router.register('delete_project/<int:id>', projects.views.DeleteProjectViewSet, basename='delete_project')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
