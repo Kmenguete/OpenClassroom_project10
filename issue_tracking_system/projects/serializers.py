@@ -64,7 +64,26 @@ class ContributorSerializer(ModelSerializer):
 
     class Meta:
         model = Contributor
-        fields = ['project', 'role']
+        fields = ['user', 'project', 'role']
+
+
+class AddContributorSerializer(ModelSerializer):
+
+    class Meta:
+        model = Contributor
+        fields = ('user', 'project', 'role')
+
+    @login_required
+    def create(self, validated_data):
+        contributor = Contributor.objects.create(
+            user=validated_data['user'],
+            project=validated_data['project'],
+            role=validated_data['role']
+        )
+
+        contributor.save()
+
+        return contributor
 
 
 class IssueSerializer(ModelSerializer):

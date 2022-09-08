@@ -8,12 +8,18 @@ class Project(models.Model):
     type = models.CharField(max_length=128)
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 
 class Contributor(models.Model):
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     permission = models.BooleanField(default=False, blank=True)
     role = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.user.__str__
 
 
 class Issue(models.Model):
