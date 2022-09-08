@@ -86,6 +86,18 @@ class AddContributorSerializer(ModelSerializer):
         return contributor
 
 
+class DeleteContributorSerializer(ModelSerializer):
+
+    class Meta:
+        model = Contributor
+        fields = ('user', 'project', 'role')
+
+    @login_required
+    def __delete__(self, id):
+        contributor = Contributor.objects.get(id=id)
+        contributor.delete()
+
+
 class IssueSerializer(ModelSerializer):
 
     class Meta:
