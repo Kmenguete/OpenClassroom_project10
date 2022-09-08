@@ -47,6 +47,8 @@ router.register('project/<int:id>/issue/<int:id>/update_comment/<int:id>', proje
                 basename='update_comment')
 router.register('project/<int:id>/issue/<int:id>/delete_comment/<int:id>', projects.views.DeleteCommentViewSet,
                 basename='delete_comment')
+router.register('project/<int:id>/issue/<int:id>/comment/<int:id>', projects.views.DetailCommentViewSet,
+                basename='comment')
 
 
 urlpatterns = [
