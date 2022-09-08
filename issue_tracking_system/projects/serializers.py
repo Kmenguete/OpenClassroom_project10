@@ -105,6 +105,29 @@ class IssueSerializer(ModelSerializer):
         fields = ['title', 'description', 'tag', 'priority', 'project', 'status', 'assignee']
 
 
+class CreateIssueSerializer(ModelSerializer):
+
+    class Meta:
+        model = Issue
+        fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
+
+    @login_required
+    def create(self, validated_data):
+        issue = Issue.objects.create(
+            title=validated_data['title'],
+            description=validated_data['description'],
+            tag=validated_data['tag'],
+            priority=validated_data['priority'],
+            project=validated_data['project'],
+            status=validated_data['status'],
+            assignee=validated_data['assignee']
+        )
+
+        issue.save()
+
+        return issue
+
+
 class CommentSerializer(ModelSerializer):
 
     class Meta:
