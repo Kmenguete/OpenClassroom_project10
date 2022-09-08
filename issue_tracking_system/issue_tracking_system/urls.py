@@ -29,6 +29,8 @@ router.register('project/<int:id>', projects.views.DetailProjectViewSet, basenam
 router.register('update_project/<int:id>', projects.views.UpdateProjectViewSet, basename='update_project')
 router.register('delete_project/<int:id>', projects.views.DeleteProjectViewSet, basename='delete_project')
 router.register('project/<int:id>/add_contributor', projects.views.AddContributorViewSet, basename='add_contributor')
+router.register('project/<int:id>/retrieve_contributors', projects.views.ListContributorViewSet,
+                basename='retrieve_contributors')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
