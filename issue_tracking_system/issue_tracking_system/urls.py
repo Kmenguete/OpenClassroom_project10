@@ -43,6 +43,8 @@ router.register('project/<int:id>/issue/<int:id>/create_comment', projects.views
                 basename='create_comment')
 router.register('project/<int:id>/issue/<int:id>/comments', projects.views.ListCommentViewSet,
                 basename='comments')
+router.register('project/<int:id>/issue/<int:id>/update_comment/<int:id>', projects.views.UpdateCommentViewSet,
+                basename='update_comment')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
