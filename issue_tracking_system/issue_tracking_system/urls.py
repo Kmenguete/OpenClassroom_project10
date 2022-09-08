@@ -37,8 +37,10 @@ router.register('project/<int:id>/issues', projects.views.ListIssueViewSet, base
 router.register('project/<int:id>/create_issue', projects.views.CreateIssueViewSet, basename='create_issue')
 router.register('project/<int:id>/update_issue/<int:id>', projects.views.CreateIssueViewSet,
                 basename='update_issue/<int:id>')
-router.register('project/<int:id>/delete_issue/<int:id>', projects.views.CreateIssueViewSet,
+router.register('project/<int:id>/delete_issue/<int:id>', projects.views.DeleteIssueViewSet,
                 basename='delete_issue/<int:id>')
+router.register('project/<int:id>/delete_issue/<int:id>/create_comment', projects.views.CreateCommentViewSet,
+                basename='delete_issue/<int:id>/create_comment')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
