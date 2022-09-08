@@ -3,7 +3,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from .models import Project, Contributor, Issue
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
-    AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, CreateIssueSerializer
+    AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, \
+    CreateIssueSerializer, UpdateIssueSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -104,3 +105,12 @@ class CreateIssueViewSet(ModelViewSet):
         project = Project.objects.get(id=id)
         issues = Issue.objects.filter(project=project)
         return issues
+
+
+class UpdateIssueViewSet(ModelViewSet):
+
+    serializer_class = UpdateIssueSerializer
+
+    @login_required
+    def get_object(self, id):
+        return Issue.objects.get(id=id)

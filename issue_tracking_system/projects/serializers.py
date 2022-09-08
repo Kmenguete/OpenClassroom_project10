@@ -128,6 +128,29 @@ class CreateIssueSerializer(ModelSerializer):
         return issue
 
 
+class UpdateIssueSerializer(ModelSerializer):
+
+    class Meta:
+        model = Issue
+        fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
+
+    @login_required
+    def update(self, id, validated_data):
+        issue = Issue.objects.get(id=id).update(
+            title=validated_data['title'],
+            description=validated_data['description'],
+            tag=validated_data['tag'],
+            priority=validated_data['priority'],
+            project=validated_data['project'],
+            status=validated_data['status'],
+            assignee=validated_data['assignee']
+        )
+
+        issue.save()
+
+        return issue
+
+
 class CommentSerializer(ModelSerializer):
 
     class Meta:
