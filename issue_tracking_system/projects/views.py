@@ -5,7 +5,7 @@ from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
     AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, \
     CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer, CreateCommentSerializer, CommentSerializer, \
-    UpdateCommentSerializer
+    UpdateCommentSerializer, DeleteCommentSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -157,3 +157,14 @@ class UpdateCommentViewSet(ModelViewSet):
     @login_required
     def get_object(self, id):
         return Comment.object.get(id=id)
+
+
+class DeleteCommentViewSet(ModelViewSet):
+
+    serializer_class = DeleteCommentSerializer
+
+    @login_required
+    def get_queryset(self, id):
+        issue = Issue.objects.get(id=id)
+        comments = Comment.objects.filter(issue=issue)
+        return comments

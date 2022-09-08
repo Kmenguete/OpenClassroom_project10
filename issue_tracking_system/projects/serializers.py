@@ -202,3 +202,15 @@ class UpdateCommentSerializer(ModelSerializer):
         comment.save()
 
         return comment
+
+
+class DeleteCommentSerializer(ModelSerializer):
+
+    class Meta:
+        model = Comment
+        fields = ('description', )
+
+    @login_required
+    def __delete__(self, id):
+        comment = Comment.objects.get(id=id)
+        comment.delete()
