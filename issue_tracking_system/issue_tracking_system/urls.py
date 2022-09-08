@@ -33,6 +33,7 @@ router.register('project/<int:id>/retrieve_contributors', projects.views.ListCon
                 basename='retrieve_contributors')
 router.register('project/<int:id>/delete_contributor/<int:id>', projects.views.DeleteContributorViewSet,
                 basename='delete_contributor')
+router.register('project/<int:id>/issues', projects.views.ListIssueViewSet, basename='issues')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
