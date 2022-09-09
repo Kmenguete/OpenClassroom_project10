@@ -10,7 +10,7 @@ from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProje
 
 
 class ProjectViewSet(ReadOnlyModelViewSet):
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectSerializer(many=True)
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
