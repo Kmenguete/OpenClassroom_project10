@@ -2,6 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Project, Contributor, Issue, Comment
+from .permissions import IsAuthorOfProject, IsContributorOfProject
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
     AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, \
     CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer, CreateCommentSerializer, CommentSerializer, \
@@ -40,7 +41,7 @@ class DetailProjectViewSet(ReadOnlyModelViewSet):
 
 class UpdateProjectViewSet(ModelViewSet):
     serializer_class = UpdateProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject]
 
     def get_queryset(self):
         queryset = Project.objects.all()
@@ -52,7 +53,7 @@ class UpdateProjectViewSet(ModelViewSet):
 
 class DeleteProjectViewSet(ModelViewSet):
     serializer_class = DeleteProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject]
 
     def get_queryset(self):
         user = self.request.user
@@ -61,7 +62,7 @@ class DeleteProjectViewSet(ModelViewSet):
 
 class AddContributorViewSet(ModelViewSet):
     serializer_class = AddContributorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject]
 
     def get_queryset(self):
         queryset = Contributor.objects.all()
@@ -73,7 +74,7 @@ class AddContributorViewSet(ModelViewSet):
 
 class ListContributorViewSet(ReadOnlyModelViewSet):
     serializer_class = ContributorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
         queryset = Contributor.objects.all()
@@ -85,7 +86,7 @@ class ListContributorViewSet(ReadOnlyModelViewSet):
 
 class DeleteContributorViewSet(ModelViewSet):
     serializer_class = DeleteContributorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject]
 
     def get_queryset(self):
         queryset = Contributor.objects.all()
@@ -97,7 +98,7 @@ class DeleteContributorViewSet(ModelViewSet):
 
 class ListIssueViewSet(ReadOnlyModelViewSet):
     serializer_class = IssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
         queryset = Issue.objects.all()
@@ -109,7 +110,7 @@ class ListIssueViewSet(ReadOnlyModelViewSet):
 
 class CreateIssueViewSet(ModelViewSet):
     serializer_class = CreateIssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
         queryset = Issue.objects.all()
