@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from .models import Project, Contributor, Issue, Comment
@@ -36,14 +35,12 @@ class CreateProjectSerializer(ModelSerializer):
         model = Project
         fields = ('title', 'description', 'type')
 
-    @login_required
-    def create(self, validated_data, request):
+    def create(self, validated_data):
         project = Project.objects.create(
             title=validated_data['title'],
             description=validated_data['description'],
             type=validated_data['type']
         )
-        project.author = request.user
         project.save()
 
         return project
@@ -55,7 +52,6 @@ class UpdateProjectSerializer(ModelSerializer):
         model = Project
         fields = ('title', 'description', 'type')
 
-    @login_required
     def update(self, id, validated_data):
         project = Project.objects.get(id=id).update(
             title=validated_data['title'],
@@ -74,7 +70,6 @@ class DeleteProjectSerializer(ModelSerializer):
         model = Project
         fields = ('title', 'description', 'type')
 
-    @login_required
     def __delete__(self, id):
         project = Project.objects.get(id=id)
         project.delete()
@@ -93,7 +88,6 @@ class AddContributorSerializer(ModelSerializer):
         model = Contributor
         fields = ('user', 'project', 'role')
 
-    @login_required
     def create(self, validated_data):
         contributor = Contributor.objects.create(
             user=validated_data['user'],
@@ -105,7 +99,6 @@ class AddContributorSerializer(ModelSerializer):
 
         return contributor
 
-    @login_required
     def validate_user(self, user):
         if Contributor.objects.filter(user=user).exist():
             raise serializers.ValidationError('This contributor is already involved in the project you'
@@ -119,7 +112,6 @@ class DeleteContributorSerializer(ModelSerializer):
         model = Contributor
         fields = ('user', 'project', 'role')
 
-    @login_required
     def __delete__(self, id):
         contributor = Contributor.objects.get(id=id)
         contributor.delete()
@@ -148,7 +140,6 @@ class CreateIssueSerializer(ModelSerializer):
         model = Issue
         fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
 
-    @login_required
     def create(self, validated_data):
         issue = Issue.objects.create(
             title=validated_data['title'],
@@ -171,7 +162,6 @@ class UpdateIssueSerializer(ModelSerializer):
         model = Issue
         fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
 
-    @login_required
     def update(self, id, validated_data):
         issue = Issue.objects.get(id=id).update(
             title=validated_data['title'],
@@ -194,7 +184,6 @@ class DeleteIssueSerializer(ModelSerializer):
         model = Issue
         fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
 
-    @login_required
     def __delete__(self, id):
         issue = Issue.objects.get(id=id)
         issue.delete()
@@ -213,7 +202,6 @@ class CreateCommentSerializer(ModelSerializer):
         model = Comment
         fields = ('description', )
 
-    @login_required
     def create(self, validated_data):
         comment = Comment.objects.create(
             description=validated_data['description']
@@ -230,7 +218,6 @@ class UpdateCommentSerializer(ModelSerializer):
         model = Comment
         fields = ('description', )
 
-    @login_required
     def update(self, id, validated_data):
         comment = Comment.objects.get(id=id).update(
             description=validated_data['description']
@@ -247,7 +234,6 @@ class DeleteCommentSerializer(ModelSerializer):
         model = Comment
         fields = ('description', )
 
-    @login_required
     def __delete__(self, id):
         comment = Comment.objects.get(id=id)
         comment.delete()
