@@ -105,6 +105,13 @@ class AddContributorSerializer(ModelSerializer):
 
         return contributor
 
+    @login_required
+    def validate_user(self, user):
+        if Contributor.objects.filter(user=user).exist():
+            raise serializers.ValidationError('This contributor is already involved in the project you'
+                                              'have selected.')
+        return user
+
 
 class DeleteContributorSerializer(ModelSerializer):
 
