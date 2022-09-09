@@ -36,9 +36,9 @@ router.register('project/<int:id>/delete_contributor/<int:id>', projects.views.D
 router.register('project/<int:id>/issues', projects.views.ListIssueViewSet, basename='issues')
 router.register('project/<int:id>/create_issue', projects.views.CreateIssueViewSet, basename='create_issue')
 router.register('project/<int:id>/update_issue/<int:id>', projects.views.UpdateIssueViewSet,
-                basename='update_issue/<int:id>')
+                basename='update_issue')
 router.register('project/<int:id>/delete_issue/<int:id>', projects.views.DeleteIssueViewSet,
-                basename='delete_issue/<int:id>')
+                basename='delete_issue')
 router.register('project/<int:id>/issue/<int:id>/create_comment', projects.views.CreateCommentViewSet,
                 basename='create_comment')
 router.register('project/<int:id>/issue/<int:id>/comments', projects.views.ListCommentViewSet,
