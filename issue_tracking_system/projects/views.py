@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Project, Contributor, Issue, Comment
-from .permissions import IsAuthorOfProject, IsContributorOfProject
+from .permissions import IsAuthorOfProject, IsContributorOfProject, IsAuthorOfIssue, IsAuthorOfComment
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
     AddContributorSerializer, ContributorSerializer, DeleteContributorSerializer, IssueSerializer, \
     CreateIssueSerializer, UpdateIssueSerializer, DeleteIssueSerializer, CreateCommentSerializer, CommentSerializer, \
@@ -122,7 +122,7 @@ class CreateIssueViewSet(ModelViewSet):
 
 class UpdateIssueViewSet(ModelViewSet):
     serializer_class = UpdateIssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfIssue]
 
     def get_queryset(self):
         queryset = Issue.objects.all()
@@ -134,7 +134,7 @@ class UpdateIssueViewSet(ModelViewSet):
 
 class DeleteIssueViewSet(ModelViewSet):
     serializer_class = DeleteIssueSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfIssue]
 
     def get_queryset(self):
         queryset = Issue.objects.all()
@@ -146,7 +146,7 @@ class DeleteIssueViewSet(ModelViewSet):
 
 class CreateCommentViewSet(ModelViewSet):
     serializer_class = CreateCommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
         queryset = Comment.objects.all()
@@ -158,7 +158,7 @@ class CreateCommentViewSet(ModelViewSet):
 
 class ListCommentViewSet(ReadOnlyModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
         queryset = Comment.objects.all()
@@ -170,7 +170,7 @@ class ListCommentViewSet(ReadOnlyModelViewSet):
 
 class UpdateCommentViewSet(ModelViewSet):
     serializer_class = UpdateCommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfComment]
 
     def get_queryset(self):
         queryset = Comment.objects.all()
@@ -182,7 +182,7 @@ class UpdateCommentViewSet(ModelViewSet):
 
 class DeleteCommentViewSet(ModelViewSet):
     serializer_class = DeleteCommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfComment]
 
     def get_queryset(self):
         queryset = Comment.objects.all()
@@ -194,7 +194,7 @@ class DeleteCommentViewSet(ModelViewSet):
 
 class DetailCommentViewSet(ReadOnlyModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
         queryset = Comment.objects.all()
