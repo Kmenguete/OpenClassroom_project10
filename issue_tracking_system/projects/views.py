@@ -1,5 +1,5 @@
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProjectSerializer, DeleteProjectSerializer, \
@@ -8,7 +8,7 @@ from .serializers import ProjectSerializer, CreateProjectSerializer, UpdateProje
     UpdateCommentSerializer, DeleteCommentSerializer
 
 
-class ProjectViewSet(ModelViewSet):
+class ProjectViewSet(ReadOnlyModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
@@ -26,7 +26,7 @@ class CreateProjectViewSet(ModelViewSet):
         return Project.objects.filter(author=user), Contributor.objects.filter(user=user).values('project')
 
 
-class DetailProjectViewSet(ModelViewSet):
+class DetailProjectViewSet(ReadOnlyModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
@@ -71,7 +71,7 @@ class AddContributorViewSet(ModelViewSet):
         return queryset
 
 
-class ListContributorViewSet(ModelViewSet):
+class ListContributorViewSet(ReadOnlyModelViewSet):
     serializer_class = ContributorSerializer
     permission_classes = [IsAuthenticated]
 
@@ -95,7 +95,7 @@ class DeleteContributorViewSet(ModelViewSet):
         return queryset
 
 
-class ListIssueViewSet(ModelViewSet):
+class ListIssueViewSet(ReadOnlyModelViewSet):
     serializer_class = IssueSerializer
     permission_classes = [IsAuthenticated]
 
@@ -155,7 +155,7 @@ class CreateCommentViewSet(ModelViewSet):
         return queryset
 
 
-class ListCommentViewSet(ModelViewSet):
+class ListCommentViewSet(ReadOnlyModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
@@ -191,7 +191,7 @@ class DeleteCommentViewSet(ModelViewSet):
         return queryset
 
 
-class DetailCommentViewSet(ModelViewSet):
+class DetailCommentViewSet(ReadOnlyModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
