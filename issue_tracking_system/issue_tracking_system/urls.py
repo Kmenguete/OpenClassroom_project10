@@ -21,14 +21,14 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 import authentication.views
 import projects.views
 
-projects_router = routers.SimpleRouter()
+projects_router = routers.SimpleRouter(trailing_slash=False)
 projects_router.register(r'project/?', projects.views.ProjectViewSet, basename="project")
 users_router = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
 users_router.register(r'users/?', projects.views.ContributorViewSet, basename="users")
-issues_routers = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
-issues_routers.register(r'issues/?', projects.views.IssueViewSet, basename="issues")
-comments_routers = routers.NestedSimpleRouter(issues_routers, r'issues/?', lookup="issues")
-comments_routers.register(r'comments/?', projects.views.CommentViewSet, basename="comments")
+issues_router = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
+issues_router.register(r'issues/?', projects.views.IssueViewSet, basename="issues")
+comments_router = routers.NestedSimpleRouter(issues_router, r'issues/?', lookup="issues")
+comments_router.register(r'comments/?', projects.views.CommentViewSet, basename="comments")
 
 
 urlpatterns = [
@@ -38,5 +38,8 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('signup/', authentication.views.SignUpView.as_view(), name='sign_up'),
     path('', include(projects_router.urls)),
+    path('', include(users_router.urls)),
+    path('', include(issues_router.urls)),
+    path('', include(comments_router.urls)),
 
 ]
