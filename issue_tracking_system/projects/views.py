@@ -32,6 +32,7 @@ class ProjectViewSet(ModelViewSet):
 
 class ContributorViewSet(ModelViewSet):
     serializer_class = ContributorSerializer
+    http_method_names = ["get", "post", "delete"]
     permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
@@ -44,6 +45,7 @@ class ContributorViewSet(ModelViewSet):
 
 class IssueViewSet(ModelViewSet):
     serializer_class = IssueSerializer
+    http_method_names = ["get", "post", "put", "delete"]
     permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
@@ -56,6 +58,7 @@ class IssueViewSet(ModelViewSet):
 
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
+    http_method_names = ["get", "post", "put", "delete"]
     permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
 
     def get_queryset(self):
