@@ -15,40 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
+from rest_framework_nested import routers
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
 import authentication.views
 import projects.views
 
-router = routers.SimpleRouter()
-
-router.register('projects', projects.views.ProjectViewSet, basename='projects')
-router.register('create_project', projects.views.CreateProjectViewSet, basename='create_project')
-router.register('project/<int:id>', projects.views.DetailProjectViewSet, basename='project')
-router.register('update_project/<int:id>', projects.views.UpdateProjectViewSet, basename='update_project')
-router.register('delete_project/<int:id>', projects.views.DeleteProjectViewSet, basename='delete_project')
-router.register('project/<int:id>/add_contributor', projects.views.AddContributorViewSet, basename='add_contributor')
-router.register('project/<int:id>/retrieve_contributors', projects.views.ListContributorViewSet,
-                basename='retrieve_contributors')
-router.register('project/<int:id>/delete_contributor/<int:id>', projects.views.DeleteContributorViewSet,
-                basename='delete_contributor')
-router.register('project/<int:id>/issues', projects.views.ListIssueViewSet, basename='issues')
-router.register('project/<int:id>/create_issue', projects.views.CreateIssueViewSet, basename='create_issue')
-router.register('project/<int:id>/update_issue/<int:id>', projects.views.UpdateIssueViewSet,
-                basename='update_issue')
-router.register('project/<int:id>/delete_issue/<int:id>', projects.views.DeleteIssueViewSet,
-                basename='delete_issue')
-router.register('project/<int:id>/issue/<int:id>/create_comment', projects.views.CreateCommentViewSet,
-                basename='create_comment')
-router.register('project/<int:id>/issue/<int:id>/comments', projects.views.ListCommentViewSet,
-                basename='comments')
-router.register('project/<int:id>/issue/<int:id>/update_comment/<int:id>', projects.views.UpdateCommentViewSet,
-                basename='update_comment')
-router.register('project/<int:id>/issue/<int:id>/delete_comment/<int:id>', projects.views.DeleteCommentViewSet,
-                basename='delete_comment')
-router.register('project/<int:id>/issue/<int:id>/comment/<int:id>', projects.views.DetailCommentViewSet,
-                basename='comment')
+projects_router = routers.SimpleRouter()
+projects_router.register(r'project/?', projects.views.ProjectViewSet, basename="project")
+users_router = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
+users_router.register(r'users/?', projects.views.ContributorViewSet, basename="users")
+issues_routers = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
+issues_routers.register(r'issues/?', projects.views.IssueViewSet, basename="issues")
+comments_routers = routers.NestedSimpleRouter(issues_routers, r'issues/?', lookup="issues")
+comments_routers.register(r'comments/?', projects.views.CommentViewSet, basename="comments")
 
 
 urlpatterns = [
@@ -57,6 +37,6 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('signup/', authentication.views.SignUpView.as_view(), name='sign_up'),
-    path('api/', include(router.urls)),
+    path('', include(projects_router.urls)),
 
 ]

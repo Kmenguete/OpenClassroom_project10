@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'django_filters',
     'projects',
+    'rest_framework_nested',
 ]
 
 MIDDLEWARE = [
@@ -128,7 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend'
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework_nested_test.filters.NestedFilterBackend'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
