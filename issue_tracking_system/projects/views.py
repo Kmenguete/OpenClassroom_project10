@@ -1,16 +1,18 @@
 from django.db.models import Q
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Project, Contributor, Issue, Comment
 from .permissions import IsAuthorOfProject, IsContributorOfProject
-from .serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
+from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
+    ProjectDetailSerializer
 
 
 class ProjectViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     http_method_names = ["get", "post", "put", "delete"]
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectListSerializer
 
     def get_queryset(self):
         return Project.objects.filter(
@@ -28,6 +30,17 @@ class ProjectViewSet(ModelViewSet):
         request.data["author"] = request.user
         request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
+
+
+class DetailProjectViewSet(ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    http_method_names = ["get"]
+    serializer_class = ProjectDetailSerializer
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class ContributorViewSet(ModelViewSet):

@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer
 from .models import Project, Contributor, Issue, Comment
 
 
-class ProjectSerializer(ModelSerializer):
+class ProjectDetailSerializer(ModelSerializer):
 
     issues = serializers.SerializerMethodField()
     contributors = serializers.SerializerMethodField()
@@ -27,6 +27,13 @@ class ProjectSerializer(ModelSerializer):
         serializer = ContributorSerializer(queryset, many=True)
 
         return serializer.data
+
+
+class ProjectListSerializer(ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ['title', 'description', 'type']
 
 
 class ContributorSerializer(ModelSerializer):
