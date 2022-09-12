@@ -55,6 +55,13 @@ class ContributorViewSet(ModelViewSet):
             queryset = queryset.filter(id=project_id)
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfProject is True:
+            request.POST._mutable = True
+            request.data["permission"] = True
+            request.POST._mutable = False
+            return super(ContributorViewSet, self).create(request, *args, **kwargs)
+
 
 class IssueViewSet(ModelViewSet):
     serializer_class = IssueSerializer
