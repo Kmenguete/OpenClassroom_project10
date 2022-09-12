@@ -29,92 +29,11 @@ class ProjectSerializer(ModelSerializer):
         return serializer.data
 
 
-class CreateProjectSerializer(ModelSerializer):
-
-    class Meta:
-        model = Project
-        fields = ('title', 'description', 'type')
-
-    def create(self, validated_data):
-        project = Project.objects.create(
-            title=validated_data['title'],
-            description=validated_data['description'],
-            type=validated_data['type']
-        )
-        project.save()
-
-        return project
-
-
-class UpdateProjectSerializer(ModelSerializer):
-
-    class Meta:
-        model = Project
-        fields = ('title', 'description', 'type')
-
-    def update(self, id, validated_data):
-        project = Project.objects.get(id=id).update(
-            title=validated_data['title'],
-            description=validated_data['description'],
-            type=validated_data['type']
-        )
-
-        project.save()
-
-        return project
-
-
-class DeleteProjectSerializer(ModelSerializer):
-
-    class Meta:
-        model = Project
-        fields = ('title', 'description', 'type')
-
-    def __delete__(self, id):
-        project = Project.objects.get(id=id)
-        project.delete()
-
-
 class ContributorSerializer(ModelSerializer):
 
     class Meta:
         model = Contributor
         fields = ['user', 'project', 'role']
-
-
-class AddContributorSerializer(ModelSerializer):
-
-    class Meta:
-        model = Contributor
-        fields = ('user', 'project', 'role')
-
-    def create(self, validated_data):
-        contributor = Contributor.objects.create(
-            user=validated_data['user'],
-            project=validated_data['project'],
-            role=validated_data['role']
-        )
-
-        contributor.save()
-
-        return contributor
-
-    def validate_user(self, user):
-        if Contributor.objects.filter(user=user).exist():
-            raise serializers.ValidationError('This contributor is already involved in the project you'
-                                              'have selected.')
-        return user
-
-
-class DeleteContributorSerializer(ModelSerializer):
-
-    class Meta:
-        model = Contributor
-        fields = ('user', 'project', 'role')
-
-    def __delete__(self, id):
-        contributor = Contributor.objects.get(id=id)
-        contributor.delete()
 
 
 class IssueSerializer(ModelSerializer):
@@ -134,106 +53,8 @@ class IssueSerializer(ModelSerializer):
         return serializer.data
 
 
-class CreateIssueSerializer(ModelSerializer):
-
-    class Meta:
-        model = Issue
-        fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
-
-    def create(self, validated_data):
-        issue = Issue.objects.create(
-            title=validated_data['title'],
-            description=validated_data['description'],
-            tag=validated_data['tag'],
-            priority=validated_data['priority'],
-            project=validated_data['project'],
-            status=validated_data['status'],
-            assignee=validated_data['assignee']
-        )
-
-        issue.save()
-
-        return issue
-
-
-class UpdateIssueSerializer(ModelSerializer):
-
-    class Meta:
-        model = Issue
-        fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
-
-    def update(self, id, validated_data):
-        issue = Issue.objects.get(id=id).update(
-            title=validated_data['title'],
-            description=validated_data['description'],
-            tag=validated_data['tag'],
-            priority=validated_data['priority'],
-            project=validated_data['project'],
-            status=validated_data['status'],
-            assignee=validated_data['assignee']
-        )
-
-        issue.save()
-
-        return issue
-
-
-class DeleteIssueSerializer(ModelSerializer):
-
-    class Meta:
-        model = Issue
-        fields = ('title', 'description', 'tag', 'priority', 'project', 'status', 'assignee')
-
-    def __delete__(self, id):
-        issue = Issue.objects.get(id=id)
-        issue.delete()
-
-
 class CommentSerializer(ModelSerializer):
 
     class Meta:
         model = Comment
         fields = ['description']
-
-
-class CreateCommentSerializer(ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = ('description', )
-
-    def create(self, validated_data):
-        comment = Comment.objects.create(
-            description=validated_data['description']
-        )
-
-        comment.save()
-
-        return comment
-
-
-class UpdateCommentSerializer(ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = ('description', )
-
-    def update(self, id, validated_data):
-        comment = Comment.objects.get(id=id).update(
-            description=validated_data['description']
-        )
-
-        comment.save()
-
-        return comment
-
-
-class DeleteCommentSerializer(ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = ('description', )
-
-    def __delete__(self, id):
-        comment = Comment.objects.get(id=id)
-        comment.delete()
