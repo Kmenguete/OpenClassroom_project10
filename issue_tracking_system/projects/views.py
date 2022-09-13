@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Project, Contributor, Issue, Comment
-from .permissions import IsAuthorOfProject, IsContributorOfProject, IsAuthorOfIssue
+from .permissions import IsAuthorOfProject, IsContributorOfProject, IsAuthorOfIssue, IsAuthorOfComment
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
 
@@ -106,3 +106,18 @@ class CommentViewSet(ModelViewSet):
         if issue_id is not None:
             queryset = queryset.filter(id=issue_id)
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfProject or IsContributorOfProject is True:
+            request.POST._mutable = True
+            request.data["author"] = request.user
+            request.POST._mutable = False
+            return super(CommentViewSet, self).create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfComment is True:
+            return super(CommentViewSet, self).update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfComment is True:
+            return super(CommentViewSet, self).destroy(request, *args, **kwargs)
