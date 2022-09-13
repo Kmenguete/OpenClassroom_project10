@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from .models import Project, Contributor, Issue, Comment
-from .permissions import IsAuthorOfProject, IsContributorOfProject
+from .permissions import IsAuthorOfProject, IsContributorOfProject, IsAuthorOfIssue
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
 
@@ -62,11 +62,15 @@ class ContributorViewSet(ModelViewSet):
             request.POST._mutable = False
             return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfProject is True:
+            return super(ContributorViewSet, self).destroy(request, *args, **kwargs)
+
 
 class IssueViewSet(ModelViewSet):
     serializer_class = IssueSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
+    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject, IsAuthorOfIssue]
 
     def get_queryset(self):
         queryset = Issue.objects.all()
@@ -74,6 +78,21 @@ class IssueViewSet(ModelViewSet):
         if project_id is not None:
             queryset = queryset.filter(id=project_id)
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfProject or IsContributorOfProject is True:
+            request.POST._mutable = True
+            request.data["author"] = request.user
+            request.POST._mutable = False
+            return super(IssueViewSet, self).create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfIssue is True:
+            return super(IssueViewSet, self).update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_authenticated and IsAuthorOfIssue is True:
+            return super(IssueViewSet, self).destroy(request, *args, **kwargs)
 
 
 class CommentViewSet(ModelViewSet):
