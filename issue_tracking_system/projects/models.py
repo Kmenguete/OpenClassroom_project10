@@ -6,7 +6,7 @@ class Project(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=2048, blank=True)
     type = models.CharField(max_length=128)
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title
@@ -29,8 +29,10 @@ class Issue(models.Model):
     priority = models.CharField(max_length=128)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     status = models.CharField(max_length=128)
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author')
-    assignee = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignee')
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author',
+                               null=True)
+    assignee = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assignee',
+                                 null=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -39,7 +41,7 @@ class Issue(models.Model):
 
 class Comment(models.Model):
     description = models.CharField(max_length=256)
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
 
