@@ -45,19 +45,9 @@ class ContributorSerializer(ModelSerializer):
 
 class IssueSerializer(ModelSerializer):
 
-    comments = serializers.SerializerMethodField()
-
     class Meta:
         model = Issue
-        fields = ['title', 'description', 'tag', 'priority', 'project', 'status', 'assignee', 'comments']
-
-    def get_comments(self, instance):
-
-        queryset = instance.comments.filter(issue=Issue)
-
-        serializer = CommentSerializer(queryset, many=True)
-
-        return serializer.data
+        fields = ['title', 'description', 'tag', 'priority', 'project', 'status', 'assignee']
 
 
 class CommentSerializer(ModelSerializer):
