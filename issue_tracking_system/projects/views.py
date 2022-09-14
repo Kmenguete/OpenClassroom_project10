@@ -65,7 +65,7 @@ class ContributorViewSet(ModelViewSet):
 class IssueViewSet(ModelViewSet):
     serializer_class = IssueSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject, IsAuthorOfIssue]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Issue.objects.all()
