@@ -56,11 +56,10 @@ class ContributorViewSet(ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfProject is True:
-            request.POST._mutable = True
-            request.data["permission"] = True
-            request.POST._mutable = False
-            return super(ContributorViewSet, self).create(request, *args, **kwargs)
+        request.POST._mutable = True
+        request.data["permission"] = True
+        request.POST._mutable = False
+        return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         if request.user.is_authenticated and IsAuthorOfProject is True:
