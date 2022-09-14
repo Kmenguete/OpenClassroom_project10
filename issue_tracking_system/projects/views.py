@@ -62,8 +62,7 @@ class ContributorViewSet(ModelViewSet):
         return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfProject is True:
-            return super(ContributorViewSet, self).destroy(request, *args, **kwargs)
+        return super(ContributorViewSet, self).destroy(request, *args, **kwargs)
 
 
 class IssueViewSet(ModelViewSet):
@@ -79,19 +78,16 @@ class IssueViewSet(ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfProject or IsContributorOfProject is True:
-            request.POST._mutable = True
-            request.data["author"] = request.user
-            request.POST._mutable = False
-            return super(IssueViewSet, self).create(request, *args, **kwargs)
+        request.POST._mutable = True
+        request.data["author"] = request.user
+        request.POST._mutable = False
+        return super(IssueViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfIssue is True:
-            return super(IssueViewSet, self).update(request, *args, **kwargs)
+        return super(IssueViewSet, self).update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfIssue is True:
-            return super(IssueViewSet, self).destroy(request, *args, **kwargs)
+        return super(IssueViewSet, self).destroy(request, *args, **kwargs)
 
 
 class CommentViewSet(ModelViewSet):
@@ -107,16 +103,13 @@ class CommentViewSet(ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfProject or IsContributorOfProject is True:
-            request.POST._mutable = True
-            request.data["author"] = request.user
-            request.POST._mutable = False
-            return super(CommentViewSet, self).create(request, *args, **kwargs)
+        request.POST._mutable = True
+        request.data["author"] = request.user
+        request.POST._mutable = False
+        return super(CommentViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfComment is True:
-            return super(CommentViewSet, self).update(request, *args, **kwargs)
+        return super(CommentViewSet, self).update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
-        if request.user.is_authenticated and IsAuthorOfComment is True:
-            return super(CommentViewSet, self).destroy(request, *args, **kwargs)
+        return super(CommentViewSet, self).destroy(request, *args, **kwargs)
