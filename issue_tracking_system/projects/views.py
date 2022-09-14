@@ -46,7 +46,7 @@ class DetailProjectViewSet(ReadOnlyModelViewSet):
 class ContributorViewSet(ModelViewSet):
     serializer_class = ContributorSerializer
     http_method_names = ["get", "post", "delete"]
-    permission_classes = [IsAuthenticated, IsAuthorOfProject, IsContributorOfProject]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = Contributor.objects.all()
@@ -60,9 +60,6 @@ class ContributorViewSet(ModelViewSet):
         request.data["permission"] = True
         request.POST._mutable = False
         return super(ContributorViewSet, self).create(request, *args, **kwargs)
-
-    def destroy(self, request, *args, **kwargs):
-        return super(ContributorViewSet, self).destroy(request, *args, **kwargs)
 
 
 class IssueViewSet(ModelViewSet):
