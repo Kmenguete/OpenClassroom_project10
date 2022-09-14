@@ -42,7 +42,7 @@ class Issue(models.Model):
 class Comment(models.Model):
     description = models.CharField(max_length=256)
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE)
+    issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
