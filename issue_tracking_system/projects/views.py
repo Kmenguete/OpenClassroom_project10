@@ -14,7 +14,8 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectListSerializer
 
     def get_queryset(self):
-        return Project.objects.filter(author=self.request.user)
+        return Project.objects.filter(author=self.request.user), \
+               Contributor.objects.filter(user=self.request.user).values('project')
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
