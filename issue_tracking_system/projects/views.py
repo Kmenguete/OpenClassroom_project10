@@ -31,9 +31,9 @@ class ProjectViewSet(ModelViewSet):
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
 
-class DetailProjectViewSet(ReadOnlyModelViewSet):
+class DetailProjectViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    http_method_names = ["get"]
+    http_method_names = ["get", "post", "put", "delete"]
     serializer_class = ProjectDetailSerializer
 
     def get_object(self):
