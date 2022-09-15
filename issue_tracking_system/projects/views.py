@@ -3,6 +3,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
+from . import models
 from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
@@ -14,18 +15,19 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectListSerializer
 
     def get_queryset(self):
-        return Project.objects.filter(author=self.request.user), \
-               Contributor.objects.filter(user=self.request.user).values('project')
+        return models.Project.objects.filter(
+            Q(author_user_id=self.request.user.id) | Q(contributor__user=self.request.user.id)
+        )
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author"] = request.user
+        request.data["author_user_id"] = request.user.pk
         request.POST._mutable = False
         return super(ProjectViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author"] = request.user
+        request.data["author_user_id"] = request.user.pk
         request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
