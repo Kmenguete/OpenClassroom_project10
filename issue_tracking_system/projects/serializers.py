@@ -33,7 +33,7 @@ class ProjectListSerializer(ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['title', 'description', 'type']
+        fields = ['title', 'description', 'type', 'author']
 
 
 class ContributorSerializer(ModelSerializer):

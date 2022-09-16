@@ -16,18 +16,18 @@ class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
         return models.Project.objects.filter(
-            Q(author_user_id=self.request.user.id) | Q(contributor__user=self.request.user.id)
+            Q(author=self.request.user.id) | Q(contributor__user=self.request.user.id)
         )
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author_user_id"] = request.user.pk
+        request.data["author"] = request.user.pk
         request.POST._mutable = False
         return super(ProjectViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author_user_id"] = request.user.pk
+        request.data["author"] = request.user.pk
         request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
