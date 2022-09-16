@@ -76,7 +76,7 @@ class IssueViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author"] = request.user
+        request.data["author"] = request.user.pk
         request.POST._mutable = False
         return super(IssueViewSet, self).create(request, *args, **kwargs)
 
@@ -101,7 +101,7 @@ class CommentViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
-        request.data["author"] = request.user
+        request.data["author"] = request.user.pk
         request.POST._mutable = False
         return super(CommentViewSet, self).create(request, *args, **kwargs)
 
