@@ -47,11 +47,11 @@ class IssueSerializer(ModelSerializer):
 
     class Meta:
         model = Issue
-        fields = ['title', 'description', 'tag', 'priority', 'project', 'status', 'assignee']
+        fields = ['title', 'description', 'tag', 'priority', 'project', 'status', 'author', 'assignee']
 
 
 class CommentSerializer(ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['description']
+        fields = ['description', 'author']
