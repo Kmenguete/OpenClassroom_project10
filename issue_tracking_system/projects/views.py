@@ -26,6 +26,9 @@ class ProjectViewSet(ModelViewSet):
         return super(ProjectViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        request.POST._mutable = True
+        request.data["author"] = request.user.pk
+        request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
 
