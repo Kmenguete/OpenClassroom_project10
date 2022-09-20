@@ -19,7 +19,7 @@ class Contributor(models.Model):
     role = models.CharField(max_length=128)
 
     def __str__(self):
-        return self.user.__str__
+        return self.role
 
 
 class Issue(models.Model):
