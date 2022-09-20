@@ -14,7 +14,7 @@ class Project(models.Model):
 
 class Contributor(models.Model):
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ManyToManyField(Project)
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     permission = models.BooleanField(default=False, blank=True)
     role = models.CharField(max_length=128)
 
