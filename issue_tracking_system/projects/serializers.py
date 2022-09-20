@@ -41,6 +41,7 @@ class ContributorSerializer(ModelSerializer):
     class Meta:
         model = Contributor
         fields = ['user', 'project', 'role']
+        depth = 1
 
 
 class IssueSerializer(ModelSerializer):
