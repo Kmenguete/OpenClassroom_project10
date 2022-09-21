@@ -1,4 +1,4 @@
-from django.db.models import Q
+# from django.db.models import Q
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
@@ -15,9 +15,11 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectListSerializer
 
     def get_queryset(self):
-        return models.Project.objects.filter(
-            Q(author=self.request.user.id) | Q(contributor__user=self.request.user.id)
-        )
+        queryset = Project.objects.all()
+        project_id = self.request.GET.get('project_id')
+        if project_id is not None:
+            queryset = queryset.filter(id=project_id)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
