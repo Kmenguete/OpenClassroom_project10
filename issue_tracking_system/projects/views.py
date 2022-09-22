@@ -22,7 +22,8 @@ class ProjectViewSet(ModelViewSet):
         queryset_2 = include_projects_as_contributor(projects_as_contributor)
         project_id = self.request.GET.get('project_id')
         if project_id is not None:
-            queryset = queryset.filter(id=project_id)
+            queryset_1 = queryset.filter(id=project_id)
+            return queryset_1
         return list(chain(queryset, queryset_2))
 
     def create(self, request, *args, **kwargs):
