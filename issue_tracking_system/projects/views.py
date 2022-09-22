@@ -20,10 +20,10 @@ class ProjectViewSet(ModelViewSet):
         queryset = Project.objects.filter(author=self.request.user)
         projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
         queryset_2 = include_projects_as_contributor(projects_as_contributor)
-        project_id = self.request.GET.get('project_id')
+        """project_id = self.request.GET.get('project_id')
         if project_id is not None:
             queryset_1 = queryset.filter(id=project_id)
-            return queryset_1
+            return queryset_1"""
         return list(chain(queryset, queryset_2))
 
     def create(self, request, *args, **kwargs):
@@ -37,6 +37,9 @@ class ProjectViewSet(ModelViewSet):
         request.data["author"] = request.user.pk
         request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
+
+    def get_object(self):
+        return Project.objects.get(author=self.request.user)
 
 
 def include_projects_as_contributor(projects_as_contributor):
