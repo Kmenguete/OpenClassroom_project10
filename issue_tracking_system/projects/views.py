@@ -1,4 +1,6 @@
 # from django.db.models import Q
+from itertools import chain
+
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
@@ -16,10 +18,12 @@ class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Project.objects.filter(author=self.request.user)
+        projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
+        queryset_2 = include_projects_as_contributor(projects_as_contributor)
         project_id = self.request.GET.get('project_id')
         if project_id is not None:
             queryset = queryset.filter(id=project_id)
-        return queryset
+        return list(chain(queryset, queryset_2))
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
@@ -32,6 +36,13 @@ class ProjectViewSet(ModelViewSet):
         request.data["author"] = request.user.pk
         request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
+
+
+def include_projects_as_contributor(projects_as_contributor):
+    projects_to_include = [projects_as_contributor]
+    for project in projects_to_include:
+        projects = Project.objects.filter(id__in=project)
+        return projects
 
 
 class DetailProjectViewSet(ModelViewSet):
