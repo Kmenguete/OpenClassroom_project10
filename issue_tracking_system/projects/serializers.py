@@ -35,14 +35,6 @@ class ProjectListSerializer(ModelSerializer):
         model = Project
         fields = ['title', 'description', 'type', 'author']
 
-    def __init__(self, *args, **kwargs):
-        super(ProjectListSerializer, self).__init__(*args, kwargs)
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            user = request.user
-            self.project = Project.objects.filter(author=user)
-            self.project_contributor = Contributor.objects.filter(user=user).values('project')
-
 
 class ContributorSerializer(ModelSerializer):
 
