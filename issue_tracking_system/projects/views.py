@@ -49,7 +49,9 @@ def include_projects_as_contributor(projects_as_contributor):
 
 
 def convert_list_to_queryset(real_queryset):
-    return real_queryset
+    for project in real_queryset:
+        projects = Project.objects.filter(id__in=project)
+        return projects
 
 
 class DetailProjectViewSet(ModelViewSet):
