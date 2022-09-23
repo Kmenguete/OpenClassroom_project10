@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 from .models import Project, Contributor, Issue, Comment
 
@@ -6,8 +6,13 @@ from .models import Project, Contributor, Issue, Comment
 class IsAuthorOfProject(BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        obj = Project.objects.get(author=request.user)
-        return bool(request.user and request.user.is_authenticated and obj)
+        if request.method in SAFE_METHODS:
+            # The method is a safe method
+            return True
+        else:
+            # The method isn't a safe method
+            # Only owners are granted permissions for unsafe methods
+            return obj.author == request.user
 
 
 class IsContributorOfProject(BasePermission):

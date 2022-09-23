@@ -29,13 +29,19 @@ class ProjectViewSet(ModelViewSet):
         return super(ProjectViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        if IsAuthorOfProject is True:
-            request.POST._mutable = True
-            request.data["author"] = request.user.pk
-            request.POST._mutable = False
-        else:
-            raise PermissionDenied()
+        request.POST._mutable = True
+        request.data["author"] = request.user.pk
+        request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
+
+    def get_permissions(self):
+        if self.action == 'update':
+            permission_classes = [IsAuthenticated, IsAuthorOfProject]
+        elif self.action == 'delete':
+            permission_classes = [IsAuthenticated, IsAuthorOfProject]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
 def include_projects_as_contributor(projects_as_contributor):
