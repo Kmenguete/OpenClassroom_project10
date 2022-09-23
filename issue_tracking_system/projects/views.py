@@ -1,11 +1,6 @@
-# from django.db.models import Q
-from itertools import chain
-
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-
-from . import models
+from rest_framework.viewsets import ModelViewSet
 from .models import Project, Contributor, Issue, Comment
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
