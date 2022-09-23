@@ -18,15 +18,12 @@ class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = Project.objects.filter(author=self.request.user)
-        projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
-        queryset_2 = include_projects_as_contributor(projects_as_contributor)
-        real_queryset = list(chain(queryset, queryset_2))
-        print("Here this is the real queryset:" + str(real_queryset))
-        new_queryset = convert_list_to_queryset(real_queryset)
+        # projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
+        # queryset_2 = include_projects_as_contributor(projects_as_contributor)
         project_id = self.request.GET.get('project_id')
         if project_id is not None:
-            new_queryset.filter(id=project_id)
-        return new_queryset
+            queryset = queryset.filter(id=project_id)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
