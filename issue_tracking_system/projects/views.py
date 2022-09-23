@@ -17,9 +17,9 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectListSerializer
 
     def get_queryset(self):
-        queryset = Project.objects.filter(author=self.request.user)
-        # projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
-        # queryset_2 = include_projects_as_contributor(projects_as_contributor)
+        projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
+        queryset_2 = include_projects_as_contributor(projects_as_contributor)
+        queryset = Project.objects.filter(author=self.request.user) | queryset_2
         project_id = self.request.GET.get('project_id')
         if project_id is not None:
             queryset = queryset.filter(id=project_id)
