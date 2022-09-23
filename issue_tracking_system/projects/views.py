@@ -1,7 +1,9 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, Contributor, Issue, Comment
+from .permissions import IsAuthorOfProject
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
 
@@ -27,9 +29,12 @@ class ProjectViewSet(ModelViewSet):
         return super(ProjectViewSet, self).create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
-        request.POST._mutable = True
-        request.data["author"] = request.user.pk
-        request.POST._mutable = False
+        if IsAuthorOfProject is True:
+            request.POST._mutable = True
+            request.data["author"] = request.user.pk
+            request.POST._mutable = False
+        else:
+            raise PermissionDenied()
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
 
