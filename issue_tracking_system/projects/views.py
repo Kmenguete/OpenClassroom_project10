@@ -69,13 +69,9 @@ class ContributorViewSet(ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        project = Project.objects.get(id="the id the user type in http request")
-        if request.user != project.author:
-            raise PermissionDenied()
-        else:
-            request.POST._mutable = True
-            request.data["permission"] = True
-            request.POST._mutable = False
+        request.POST._mutable = True
+        request.data["permission"] = True
+        request.POST._mutable = False
         return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
 
