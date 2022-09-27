@@ -2,7 +2,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, Contributor, Issue, Comment
-from .permissions import IsAuthorOfProject, IsAuthorOfIssue
+from .permissions import IsAuthorOfProject, IsAuthorOfIssue, IsAuthorOfComment
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
 
@@ -102,7 +102,7 @@ class IssueViewSet(ModelViewSet):
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOfComment]
 
     def get_queryset(self):
         queryset = Comment.objects.all()
@@ -117,8 +117,8 @@ class CommentViewSet(ModelViewSet):
         request.POST._mutable = False
         return super(CommentViewSet, self).create(request, *args, **kwargs)
 
-    def update(self, request, *args, **kwargs):
-        return super(CommentViewSet, self).update(request, *args, **kwargs)
+    def perform_update(self, serializer):
+        serializer.save(author=self.request.user)
 
     def destroy(self, request, *args, **kwargs):
         return super(CommentViewSet, self).destroy(request, *args, **kwargs)
