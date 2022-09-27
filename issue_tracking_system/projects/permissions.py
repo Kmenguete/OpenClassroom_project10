@@ -7,10 +7,10 @@ from .models import Project, Contributor, Issue, Comment
 class IsAuthorOfProject(BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if obj.author == request.user:
+        if request.method in SAFE_METHODS:
             return True
         else:
-            raise PermissionDenied()
+            return obj.author == request.user
 
 
 class IsContributorOfProject(BasePermission):
