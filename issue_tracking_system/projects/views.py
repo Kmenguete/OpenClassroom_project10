@@ -1,3 +1,4 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -68,9 +69,13 @@ class ContributorViewSet(ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        request.POST._mutable = True
-        request.data["permission"] = True
-        request.POST._mutable = False
+        project = Project.objects.get(id="the id the user type in http request")
+        if request.user != project.author:
+            raise PermissionDenied()
+        else:
+            request.POST._mutable = True
+            request.data["permission"] = True
+            request.POST._mutable = False
         return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
 
