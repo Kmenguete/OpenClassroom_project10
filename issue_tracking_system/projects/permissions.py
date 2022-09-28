@@ -12,6 +12,12 @@ class IsAuthorOfProject(BasePermission):
             return obj.author == request.user
 
 
+class CanAddContributor(BasePermission):
+
+    def has_permission(self, request, view):
+        pass
+
+
 class IsContributorOfProject(BasePermission):
 
     def has_object_permission(self, request, view, obj):
