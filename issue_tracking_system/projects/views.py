@@ -2,7 +2,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, Contributor, Issue, Comment
-from .permissions import IsAuthorOfProject, IsAuthorOfIssue, IsAuthorOfComment, CanAddContributor
+from .permissions import IsAuthorOfProject, IsAuthorOfIssue, IsAuthorOfComment, CanEditContributor
 from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
     ProjectDetailSerializer
 
@@ -58,7 +58,7 @@ class DetailProjectViewSet(ModelViewSet):
 class ContributorViewSet(ModelViewSet):
     serializer_class = ContributorSerializer
     http_method_names = ["get", "post", "delete"]
-    permission_classes = [IsAuthenticated, CanAddContributor]
+    permission_classes = [IsAuthenticated, CanEditContributor]
 
     def get_queryset(self):
         queryset = Contributor.objects.all()

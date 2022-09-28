@@ -1,6 +1,7 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from .models import Contributor
+from .models import Contributor, Project
 
 
 class IsAuthorOfProject(BasePermission):
@@ -12,10 +13,15 @@ class IsAuthorOfProject(BasePermission):
             return obj.author == request.user
 
 
-class CanAddContributor(BasePermission):
+class CanEditContributor(BasePermission):
 
-    def has_permission(self, request, view):
-        pass
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        elif obj.project.author != request.user and request.method == "POST":
+            raise PermissionDenied()
+        else:
+            return obj.project.author == request.user
 
 
 class IsContributorOfProject(BasePermission):
