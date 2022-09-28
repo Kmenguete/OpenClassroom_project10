@@ -13,7 +13,7 @@ class IsAuthorOfProject(BasePermission):
             return obj.author == request.user
 
 
-class CanEditContributor(BasePermission):
+class IsAuthorOrReadonly(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
