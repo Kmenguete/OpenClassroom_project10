@@ -15,11 +15,9 @@ class IsAuthorOfProject(BasePermission):
 
 class IsContributorOfProject(BasePermission):
 
-    def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
-        else:
-            return obj.user != request.user
+    def has_permission(self, request, view):
+        contributors = Contributor.objects.filter(user=request.user).exists()
+        return not contributors
 
 
 class IsAuthorOfIssue(BasePermission):
