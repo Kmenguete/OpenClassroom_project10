@@ -1,3 +1,4 @@
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -72,6 +73,12 @@ class ContributorViewSet(ModelViewSet):
         request.data["permission"] = True
         request.POST._mutable = False
         return super(ContributorViewSet, self).create(request, *args, **kwargs)
+
+    def perform_destroy(self, instance):
+        if instance.project.author == self.request.user:
+            instance.delete()
+        else:
+            raise PermissionDenied()
 
 
 class IssueViewSet(ModelViewSet):
