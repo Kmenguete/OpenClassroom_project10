@@ -13,20 +13,13 @@ class IsAuthorOfProject(BasePermission):
             return obj.author == request.user
 
 
-class IsAuthorOrReadonly(BasePermission):
+class IsContributorOfProject(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
         else:
-            return obj.project.author == request.user
-
-
-class IsContributorOfProject(BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        obj = Contributor.objects.filter(user=request.user).values('project')
-        return bool(request.user and request.user.is_authenticated and obj)
+            return obj.user != request.user
 
 
 class IsAuthorOfIssue(BasePermission):
