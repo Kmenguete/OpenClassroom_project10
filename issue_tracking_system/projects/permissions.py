@@ -19,10 +19,6 @@ class IsContributorOfProject(BasePermission):
         contributors = Contributor.objects.filter(user=request.user).exists()
         return not contributors
 
-    def has_object_permission(self, request, view, obj):
-        if request.user == obj.project.author:
-            return obj
-
 
 class IsAuthorOfIssue(BasePermission):
 
