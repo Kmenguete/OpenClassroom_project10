@@ -27,11 +27,10 @@ class IsAuthor(BasePermission):
 
 class IsProjectAuthorFromProjectView(IsAuthor):
     def has_permission(self, request, view):
-        project = get_object_or_404(Project, id=view.kwargs['pk'])
         if view.action not in ("create", "update", "destroy"):
             return True
 
-        return self.is_author(content_type=project, pk=view.kwargs["pk"], user=request.user)
+        return self.is_author(content_type=Project, pk=view.kwargs["pk"], user=request.user)
 
 
 class IsAuthorOfIssue(BasePermission):
