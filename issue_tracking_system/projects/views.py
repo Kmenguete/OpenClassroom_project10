@@ -82,7 +82,7 @@ class ContributorViewSet(ModelViewSet):
 
     def get_object(self):
         queryset = self.get_queryset()
-        user = self.request.query_params.get('user', None)
+        user = self.kwargs['pk']
         obj = get_object_or_404(queryset, user=user)
         self.check_object_permissions(self.request, obj)
         return obj
