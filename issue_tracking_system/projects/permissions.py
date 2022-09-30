@@ -30,7 +30,7 @@ class IsProjectAuthorFromProjectView(IsAuthor):
         if view.action not in ("create", "update", "destroy"):
             return True
 
-        return self.is_author(content_type=Project, pk=view.kwargs["pk"], user=request.user)
+        return self.is_author(content_type=Project, pk=view.kwargs["project__pk"], user=request.user)
 
 
 class IsAuthorOfIssue(BasePermission):
