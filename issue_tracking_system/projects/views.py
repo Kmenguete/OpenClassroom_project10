@@ -85,7 +85,7 @@ class ContributorViewSet(ModelViewSet):
         user = self.request.query_params.get('user', None)
         obj = get_object_or_404(queryset, user=user)
         self.check_object_permissions(self.request, obj)
-        return obj.user
+        return obj
 
 
 class IssueViewSet(ModelViewSet):
