@@ -80,6 +80,13 @@ class ContributorViewSet(ModelViewSet):
         else:
             raise PermissionDenied()"""
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        pk = self.request.query_params.get('pk', None)
+        obj = get_object_or_404(queryset, pk=pk)
+        self.check_object_permissions(self.request, obj)
+        return obj.user.id
+
 
 class IssueViewSet(ModelViewSet):
     serializer_class = IssueSerializer
