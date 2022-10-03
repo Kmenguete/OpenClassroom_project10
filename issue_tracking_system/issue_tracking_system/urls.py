@@ -23,9 +23,6 @@ import projects.views
 
 projects_router = routers.SimpleRouter(trailing_slash=False)
 projects_router.register(r'project/?', projects.views.ProjectViewSet, basename="project")
-# detail_project_router = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
-# detail_project_router.register(r'project/?', projects.views.DetailProjectViewSet,
-# basename="project")
 users_router = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
 users_router.register(r'users/?', projects.views.ContributorViewSet, basename="users")
 issues_router = routers.NestedSimpleRouter(projects_router, r'project/?', lookup="project")
@@ -40,7 +37,6 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('signup/', authentication.views.SignUpView.as_view(), name='sign_up'),
     path('', include(projects_router.urls)),
-    # path('', include(detail_project_router.urls)),
     path('', include(users_router.urls)),
     path('', include(issues_router.urls)),
     path('', include(comments_router.urls)),
