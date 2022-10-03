@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from .models import Project
+from .models import Project, Contributor
 
 
 class IsAuthorOfProject(BasePermission):
@@ -29,6 +29,22 @@ class IsProjectAuthorFromProjectView(IsAuthor):
             return True
 
         return self.is_author(content_type=Project, pk=view.kwargs["project__pk"], user=request.user)
+
+
+class IsContributorOfProject(BasePermission):
+
+    def is_already_contributor_of_project(self, content_type, user, project):
+        return content_type.objects.filter(user=user, project=project).exists()
+
+
+class ContributorAlreadyExists(IsContributorOfProject):
+    message = "You cannot add the same contributor twice."
+
+    def has_permission(self, request, view):
+        if view.action in ("create",):
+            return False
+        return self.is_already_contributor_of_project(content_type=Contributor, user=view.kwargs["pk"],
+                                                      project=view.kwargs["project__pk"])
 
 
 class IsAuthorOfIssue(BasePermission):
