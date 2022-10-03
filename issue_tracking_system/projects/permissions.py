@@ -34,7 +34,11 @@ class IsProjectAuthorFromProjectView(IsAuthor):
 class IsContributorOfProject(BasePermission):
 
     def is_already_contributor_of_project(self, content_type, user, project):
-        return content_type.objects.filter(user=user, project=project).exists()
+        content = content_type.objects.filter(user=user, project=project).exists()
+        if content is True:
+            return False
+        else:
+            return True
 
 
 class ContributorAlreadyExists(IsContributorOfProject):
@@ -42,9 +46,8 @@ class ContributorAlreadyExists(IsContributorOfProject):
 
     def has_permission(self, request, view):
         if view.action in ("create",):
-            return False
-        return self.is_already_contributor_of_project(content_type=Contributor, user=view.kwargs["pk"],
-                                                      project=view.kwargs["project__pk"])
+            return self.is_already_contributor_of_project(content_type=Contributor, user=request.data["user"],
+                                                          project=view.kwargs["project__pk"])
 
 
 class IsAuthorOfIssue(BasePermission):
