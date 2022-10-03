@@ -1,9 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from .models import Contributor, Project
+from .models import Project
 
 
 class IsAuthorOfProject(BasePermission):

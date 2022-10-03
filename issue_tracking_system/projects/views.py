@@ -61,12 +61,6 @@ class ContributorViewSet(ModelViewSet):
         request.POST._mutable = False
         return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
-    """def perform_destroy(self, instance):
-        if instance.project.author == self.request.user:
-            instance.delete()
-        else:
-            raise PermissionDenied()"""
-
     def get_object(self):
         queryset = self.get_queryset()
         user = self.kwargs['pk']
