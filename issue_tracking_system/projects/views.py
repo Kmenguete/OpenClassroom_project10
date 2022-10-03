@@ -1,17 +1,15 @@
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from .models import Project, Contributor, Issue, Comment
 from .permissions import IsAuthorOfProject, IsAuthorOfIssue, IsAuthorOfComment, IsProjectAuthorFromProjectView
-from .serializers import ProjectListSerializer, ContributorSerializer, IssueSerializer, CommentSerializer, \
-    ProjectDetailSerializer
+from .serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 
 
 class ProjectViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsAuthorOfProject]
     http_method_names = ["get", "post", "put", "delete"]
-    serializer_class = ProjectListSerializer
+    serializer_class = ProjectSerializer
 
     def get_queryset(self):
         projects_as_contributor = Contributor.objects.filter(user=self.request.user).values('project')
@@ -43,17 +41,6 @@ def convert_list_to_queryset(real_queryset):
     for project in real_queryset:
         projects = Project.objects.filter(id__in=project)
         return projects
-
-
-class DetailProjectViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    http_method_names = ["get", "post", "put", "delete"]
-    serializer_class = ProjectDetailSerializer
-
-    def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
-        self.check_object_permissions(self.request, obj)
-        return obj
 
 
 class ContributorViewSet(ModelViewSet):
