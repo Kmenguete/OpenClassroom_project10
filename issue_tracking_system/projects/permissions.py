@@ -48,6 +48,8 @@ class ContributorAlreadyExists(IsContributorOfProject):
         if view.action in ("create",):
             return self.is_already_contributor_of_project(content_type=Contributor, user=request.data["user"],
                                                           project=view.kwargs["project__pk"])
+        else:
+            return True
 
 
 class IsAuthorOfIssue(BasePermission):
