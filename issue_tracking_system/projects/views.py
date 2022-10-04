@@ -50,10 +50,8 @@ class ContributorViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsProjectAuthorFromProjectView, ContributorAlreadyExists]
 
     def get_queryset(self):
-        queryset = Contributor.objects.all()
-        project_id = self.request.GET.get('project_id')
-        if project_id is not None:
-            queryset = queryset.filter(id=project_id)
+        project = self.kwargs["project__pk"]
+        queryset = Contributor.objects.filter(project=project)
         return queryset
 
     def create(self, request, *args, **kwargs):
@@ -76,10 +74,8 @@ class IssueViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsAuthorOfIssue]
 
     def get_queryset(self):
-        queryset = Issue.objects.all()
-        project_id = self.request.GET.get('project_id')
-        if project_id is not None:
-            queryset = queryset.filter(id=project_id)
+        project = self.kwargs["project__pk"]
+        queryset = Issue.objects.filter(project=project)
         return queryset
 
     def create(self, request, *args, **kwargs):
@@ -101,10 +97,8 @@ class CommentViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsAuthorOfComment]
 
     def get_queryset(self):
-        queryset = Comment.objects.all()
-        issue_id = self.request.GET.get('issue_id')
-        if issue_id is not None:
-            queryset = queryset.filter(id=issue_id)
+        issue = self.kwargs["issues__pk"]
+        queryset = Comment.objects.filter(issue=issue)
         return queryset
 
     def create(self, request, *args, **kwargs):
