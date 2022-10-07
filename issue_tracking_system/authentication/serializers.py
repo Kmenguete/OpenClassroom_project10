@@ -31,6 +31,14 @@ class SignUpSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
+        elif self.validate_digits_letters(attrs['username']) is False:
+            raise serializers.ValidationError({"username": "Username should not have special characters."})
+        elif self.validate_digits_letters(attrs['password']) is False:
+            raise serializers.ValidationError({"password": "Password should not have special characters."})
+        elif self.validate_digits_letters(attrs['first_name']) is False:
+            raise serializers.ValidationError({"first_name": "First name should not have special characters."})
+        elif self.validate_digits_letters(attrs['last_name']) is False:
+            raise serializers.ValidationError({"last_name": "Last name should not have special characters."})
 
         return attrs
 
@@ -46,3 +54,9 @@ class SignUpSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+    def validate_digits_letters(self, word):
+        for char in word:
+            if not char.isdigit() and not char.isalpha():
+                return False
+        return True
