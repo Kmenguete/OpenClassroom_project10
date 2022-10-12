@@ -5,7 +5,6 @@ from .models import Project, Contributor
 
 
 class IsAuthorOfProject(BasePermission):
-
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
@@ -28,11 +27,12 @@ class IsProjectAuthorFromProjectView(IsAuthor):
         if view.action not in ("create", "update", "destroy"):
             return True
 
-        return self.is_author(content_type=Project, pk=view.kwargs["project__pk"], user=request.user)
+        return self.is_author(
+            content_type=Project, pk=view.kwargs["project__pk"], user=request.user
+        )
 
 
 class IsContributorOfProject(BasePermission):
-
     def is_already_contributor_of_project(self, content_type, user, project):
         content = content_type.objects.filter(user=user, project=project).exists()
         if content is True:
@@ -46,14 +46,16 @@ class ContributorAlreadyExists(IsContributorOfProject):
 
     def has_permission(self, request, view):
         if view.action in ("create",):
-            return self.is_already_contributor_of_project(content_type=Contributor, user=request.data["user"],
-                                                          project=view.kwargs["project__pk"])
+            return self.is_already_contributor_of_project(
+                content_type=Contributor,
+                user=request.data["user"],
+                project=view.kwargs["project__pk"],
+            )
         else:
             return True
 
 
 class IsAuthorOfIssue(BasePermission):
-
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
@@ -62,7 +64,6 @@ class IsAuthorOfIssue(BasePermission):
 
 
 class IsAuthorOfComment(BasePermission):
-
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
