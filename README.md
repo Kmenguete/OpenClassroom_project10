@@ -42,3 +42,6 @@ in your local machine, you have two choices:
 you fill comfortable with) to work with the API and test every endpoint.
 
 -Or you can use the default Django Rest Framework website.
+
+In the following link you will see the online documentation of the API:
+https://documenter.getpostman.com/view/23193108/2s83zfPjq1 
