@@ -30,3 +30,15 @@ and add Django(and his version) and Django Rest Framework(and his latest release
 in the requirements.txt file. Afterwards, go to the terminal of your IDE(still
 in the directory you started your Django project) and run the following command:
 pip install -r requirements.txt.
+***
+### 4. Starting the project
+***
+Once you have successfully installed Django and Django Rest Framework, you can clone
+the project by using git clone or git pull with the following address: 
+https://github.com/Kmenguete/OpenClassroom_project10.git. When you pulled the project
+in your local machine, you have two choices:
+
+-You can use Postman(or any other platform
+you fill comfortable with) to work with the API and test every endpoint.
+
+-Or you can use the default Django Rest Framework website.
