@@ -19,3 +19,14 @@ are required.
 ***
 ### 3. Installation
 ***
+In order to install Django Rest Framework, you need first to install Django. Before 
+to install Django, make sure your virtual environment is activated. 
+If your virtual environment is not activated run the following 
+command "env/bin/activate" in the directory you intend to start the project
+(in the terminal of your IDE). In the directory, you intend to start your project, 
+install Django by running the following command in the terminal of your IDE: 
+pip install django. Once Django is installed,create a file named requirements.txt
+and add Django(and his version) and Django Rest Framework(and his latest release) 
+in the requirements.txt file. Afterwards, go to the terminal of your IDE(still
+in the directory you started your Django project) and run the following command:
+pip install -r requirements.txt.
